@@ -27,7 +27,7 @@ function GenerateOTP(props) {
 					Click To Get OTP
 				</button>
 			</div>
-			<div>Your OTP : {props.originOTP}</div>
+			<div className={cx("otp_number")}>Your OTP : {props.originOTP}</div>
 		</>
 	);
 }

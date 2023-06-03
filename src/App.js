@@ -1,4 +1,3 @@
-import OTP from "./components/OTP/OTP";
 import Navbar from "./components/Navbar/Navbar";
 import { publicRoutes } from "./routes";
 import "./App.css";

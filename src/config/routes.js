@@ -1,3 +1,4 @@
+
 const routesConfig = {
     home: '/',
     otp: '/otp'
