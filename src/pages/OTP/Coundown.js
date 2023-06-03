@@ -17,6 +17,7 @@ function Coundown(props) {
 		if (count === 0)
 		{
 			props.setOriginOTP('');
+			props.setIsDisabled(true);
 			return
 		};
 		

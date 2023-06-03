@@ -20,9 +20,8 @@ function Navbar() {
 					<OTPicon />
 				</Link>
 			</div>
-			
 			<div className={classes}>
-				<a href="/">Home</a>
+				<Link to="/list">ListUser</Link>
 			</div>
 			<div className={classes}>
 				<a href="/">Home</a>

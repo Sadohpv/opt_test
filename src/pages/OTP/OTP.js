@@ -18,7 +18,7 @@ function OTP() {
         }
         
     }
-
+    
     return ( 
         <div className={cx('otp_container')}>
             <GenerateOTP 

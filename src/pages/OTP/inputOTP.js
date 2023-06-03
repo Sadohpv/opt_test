@@ -41,7 +41,7 @@ function InputOTP(props) {
 					renderInput={(props) => <input {...props} />}
 					inputStyle={cx("input-customized")}
 				/>
-				{ props.originOTP && <Coundown setOriginOTP={props.setOriginOTP}/>}
+				{ props.originOTP && <Coundown setOriginOTP={props.setOriginOTP} setIsDisabled={props.setIsDisabled}/>}
 
 				<div className={cx("action")}>
 					<button className={cx("action_btn", { disable: disabled })} onClick={handleClear}>

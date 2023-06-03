@@ -1,7 +1,8 @@
 
 const routesConfig = {
     home: '/',
-    otp: '/otp'
+    otp: '/otp',
+    list: '/list',
 }
 
 export default routesConfig;
