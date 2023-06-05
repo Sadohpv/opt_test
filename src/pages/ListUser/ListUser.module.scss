@@ -9,6 +9,7 @@
     font-family: Arial, Helvetica, sans-serif;
     border-collapse: collapse;
     width: 100vw;
+    margin: 10px 0;
   }
   
   #table td, #table th {
@@ -31,8 +32,17 @@
   .image{
     border-radius: 50%;
     height: 50px;
+    width: 50px;
+    object-fit: cover;
   }
   .image_div{
     width: 60px;
 
+  }
+  .button{
+    width: 100%;
+    margin-top: 40px;
+    position: relative;
+    display: flex;
+    flex-direction: row-reverse;
   }
