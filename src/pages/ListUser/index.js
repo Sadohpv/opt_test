@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
-import { fetchAllUser,postCreateUser } from "../../services/UserService";
+import { fetchAllUser, postCreateUser } from "../../services/UserService";
 import styles from "./ListUser.module.scss";
 import classNames from "classnames/bind";
 import ReactPaginate from "react-paginate";
 import ModalCustom from "../../components/Modal";
-
+import ToastifyUser from "./toastUser";
+import { toast } from "react-toastify";
+import EditUser from "./editUser";
 const cx = classNames.bind(styles);
 
 function ListUser() {
@@ -13,13 +15,27 @@ function ListUser() {
 	const [totalPages, setTotalPages] = useState(0);
 
 	const [modalShow, setModalShow] = useState(false);
+    const [modalShowEdit, setModalShowEdit] = useState(false);
+
 	const [name, setName] = useState("");
 	const [job, setJob] = useState("");
+	const [dataUserEdit, setDataUserEdit] = useState([]);
 
 	const handleSave = async () => {
-		let res = await postCreateUser(name,job);
-	
-		console.log(res);
+		let res = await postCreateUser(name, job);
+		if (res && res.id) {
+			console.log(res);
+			setModalShow(false);
+
+			setName('');
+			setJob('');
+			toast.success('Created Success');
+			handleUpdate({
+				first_name:name, id:res.id,
+			});
+		}else {
+			toast.error('Failed to create');
+		}
 	};
 
 	useEffect(() => {
@@ -39,10 +55,19 @@ function ListUser() {
 	const handlePageClick = (event) => {
 		getUsers(event.selected + 1);
 	};
+
+	const handleUpdate = (user)=>{
+		setListUser([user,...listUser]);
+	}
+
+	const handleEdit = (item)=>{
+		setDataUserEdit(item);
+		setModalShowEdit(true);
+	}
 	return (
 		<>
-			<div className={cx('button')}>
-				<button type="button" className="btn btn-dark" onClick={()=>setModalShow(true)}>
+			<div className={cx("button")}>
+				<button type="button" className="btn btn-dark" onClick={() => setModalShow(true)}>
 					+ Add New User
 				</button>
 			</div>
@@ -57,6 +82,8 @@ function ListUser() {
 							<th>Email</th>
 							<th>First Name</th>
 							<th>Last Name</th>
+							<th>Actions</th>
+
 						</tr>
 					</thead>
 					<tbody>
@@ -71,13 +98,23 @@ function ListUser() {
 												<img
 													className={cx("image")}
 													alt="user_avatar"
-													src={item.avatar}
+													src={item.avatar || "https://scontent.fhan15-1.fna.fbcdn.net/v/t39.30808-1/348429486_720579486534998_3411922164905511809_n.jpg?stp=cp6_dst-jpg_p320x320&_nc_cat=105&ccb=1-7&_nc_sid=7206a8&_nc_ohc=R2U-ePvMtbAAX-x_QEj&_nc_ht=scontent.fhan15-1.fna&oh=00_AfBSLlfBsrBIgXQ5EqguzVOsLv98OsxKrokfHdPnVBTpuw&oe=6481D2E7"}
 												/>
 											</div>
 										</td>
 										<td>{item.email}</td>
 										<td>{item.first_name}</td>
 										<td>{item.last_name}</td>
+										<td>
+											<button className="btn btn-warning mx-3" onClick={()=>handleEdit(item)}>
+												Edit
+											</button>
+											<button className="btn btn-danger">
+												Delete
+											</button>
+										</td>
+
+
 									</tr>
 								);
 							})}
@@ -129,6 +166,19 @@ function ListUser() {
 					</div>
 				</div>
 			</ModalCustom>
+			
+
+			<EditUser 
+			modalShowEdit={modalShowEdit}
+			setModalShowEdit={setModalShowEdit}
+			name={name}
+			setName={setName}
+			job = {job}
+			setJob = {setJob}
+			dataUserEdit={dataUserEdit}
+			setDataUserEdit={setDataUserEdit}
+			/>
+			<ToastifyUser />
 		</>
 	);
 }
