@@ -12,7 +12,7 @@ instance.interceptors.response.use(
 		
 		
 		//response.headers("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-		return response.data;
+		return response.data ? response.data : response.status;
 	},
 	(error) => {
 		return Promise.reject(error);

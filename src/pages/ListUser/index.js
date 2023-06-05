@@ -7,6 +7,9 @@ import ModalCustom from "../../components/Modal";
 import ToastifyUser from "./toastUser";
 import { toast } from "react-toastify";
 import EditUser from "./editUser";
+import _ from "lodash";
+import DeleteUser from "./deleteUser";
+
 const cx = classNames.bind(styles);
 
 function ListUser() {
@@ -15,11 +18,14 @@ function ListUser() {
 	const [totalPages, setTotalPages] = useState(0);
 
 	const [modalShow, setModalShow] = useState(false);
-    const [modalShowEdit, setModalShowEdit] = useState(false);
+	const [modalShowEdit, setModalShowEdit] = useState(false);
+	const [modalShowDelete, setModalShowDelete] = useState(false);
 
 	const [name, setName] = useState("");
 	const [job, setJob] = useState("");
 	const [dataUserEdit, setDataUserEdit] = useState([]);
+	const [dataUserDelete, setDataUserDelete] = useState([]);
+
 
 	const handleSave = async () => {
 		let res = await postCreateUser(name, job);
@@ -27,14 +33,15 @@ function ListUser() {
 			console.log(res);
 			setModalShow(false);
 
-			setName('');
-			setJob('');
-			toast.success('Created Success');
+			setName("");
+			setJob("");
+			toast.success("Created Success");
 			handleUpdate({
-				first_name:name, id:res.id,
+				first_name: name,
+				id: res.id,
 			});
-		}else {
-			toast.error('Failed to create');
+		} else {
+			toast.error("Failed to create");
 		}
 	};
 
@@ -56,14 +63,37 @@ function ListUser() {
 		getUsers(event.selected + 1);
 	};
 
-	const handleUpdate = (user)=>{
-		setListUser([user,...listUser]);
-	}
+	const handleUpdate = (user) => {
+		setListUser([user, ...listUser]);
+	};
 
-	const handleEdit = (item)=>{
+	const handleEditShow = (item) => {
 		setDataUserEdit(item);
 		setModalShowEdit(true);
+	};
+
+	const handleDeleteShow = (item) => {
+		setDataUserDelete(item);
+		setModalShowDelete(true);
+
+	};
+	const handlePutData = (userEdit) => {
+		let cloneListUser = _.cloneDeep(listUser);
+		let index = listUser.findIndex((item) => item.id === userEdit.id);
+		cloneListUser[index].first_name = userEdit.first_name;
+		setListUser(cloneListUser);
+		toast.success("Updated Success");
+	};
+
+	const handleDeleteData = (userDelete)=>{
+		let cloneListUser = _.cloneDeep(listUser);
+		//console.log(cloneListUser)
+		cloneListUser = cloneListUser.filter(item => item.id !== userDelete.id );
+		//console.log(userDelete)
+		setListUser(cloneListUser);
+	
 	}
+
 	return (
 		<>
 			<div className={cx("button")}>
@@ -83,7 +113,6 @@ function ListUser() {
 							<th>First Name</th>
 							<th>Last Name</th>
 							<th>Actions</th>
-
 						</tr>
 					</thead>
 					<tbody>
@@ -98,7 +127,10 @@ function ListUser() {
 												<img
 													className={cx("image")}
 													alt="user_avatar"
-													src={item.avatar || "https://scontent.fhan15-1.fna.fbcdn.net/v/t39.30808-1/348429486_720579486534998_3411922164905511809_n.jpg?stp=cp6_dst-jpg_p320x320&_nc_cat=105&ccb=1-7&_nc_sid=7206a8&_nc_ohc=R2U-ePvMtbAAX-x_QEj&_nc_ht=scontent.fhan15-1.fna&oh=00_AfBSLlfBsrBIgXQ5EqguzVOsLv98OsxKrokfHdPnVBTpuw&oe=6481D2E7"}
+													src={
+														item.avatar ||
+														"https://scontent.fhan15-1.fna.fbcdn.net/v/t39.30808-1/348429486_720579486534998_3411922164905511809_n.jpg?stp=cp6_dst-jpg_p320x320&_nc_cat=105&ccb=1-7&_nc_sid=7206a8&_nc_ohc=R2U-ePvMtbAAX-x_QEj&_nc_ht=scontent.fhan15-1.fna&oh=00_AfBSLlfBsrBIgXQ5EqguzVOsLv98OsxKrokfHdPnVBTpuw&oe=6481D2E7"
+													}
 												/>
 											</div>
 										</td>
@@ -106,15 +138,17 @@ function ListUser() {
 										<td>{item.first_name}</td>
 										<td>{item.last_name}</td>
 										<td>
-											<button className="btn btn-warning mx-3" onClick={()=>handleEdit(item)}>
+											<button
+												className="btn btn-warning mx-3"
+												onClick={() => handleEditShow(item)}
+											>
 												Edit
 											</button>
-											<button className="btn btn-danger">
-												Delete
-											</button>
+											<button className="btn btn-danger"
+											onClick={() => handleDeleteShow(item)}
+											
+											>Delete</button>
 										</td>
-
-
 									</tr>
 								);
 							})}
@@ -166,18 +200,32 @@ function ListUser() {
 					</div>
 				</div>
 			</ModalCustom>
-			
 
-			<EditUser 
-			modalShowEdit={modalShowEdit}
-			setModalShowEdit={setModalShowEdit}
-			name={name}
-			setName={setName}
-			job = {job}
-			setJob = {setJob}
-			dataUserEdit={dataUserEdit}
-			setDataUserEdit={setDataUserEdit}
+			<EditUser
+				modalShowEdit={modalShowEdit}
+				setModalShowEdit={setModalShowEdit}
+				name={name}
+				setName={setName}
+				job={job}
+				setJob={setJob}
+				dataUserEdit={dataUserEdit}
+				setDataUserEdit={setDataUserEdit}
+				handlePutData={handlePutData}
 			/>
+
+			<DeleteUser
+				modalShowDelete={modalShowDelete}
+				setModalShowDelete={setModalShowDelete}
+				name={name}
+				setName={setName}
+				job={job}
+				setJob={setJob}
+				dataUserDelete={dataUserDelete}
+				setDataUserDelete = {setDataUserDelete}
+				handleDeleteData={handleDeleteData}
+			
+			/>
+
 			<ToastifyUser />
 		</>
 	);

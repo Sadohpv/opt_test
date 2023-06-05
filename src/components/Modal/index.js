@@ -16,7 +16,7 @@ function ModalCustom({
 
 	return (
 		<>
-			<Modal onHide={handleClose} show={modalShow} backdrop="static">
+			<Modal onHide={handleClose} show={modalShow} backdrop="static" keyboard={false}>
 				<Modal.Header closeButton>
 					<Modal.Title>{title}</Modal.Title>
 				</Modal.Header>
