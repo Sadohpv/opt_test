@@ -1,30 +1,51 @@
 import styles from "./Navbar.module.scss";
 import classNames from "classnames/bind";
-import { OTPicon,HomeIcon } from "../../asset/icons";
-import { Link } from "react-router-dom";
+import { OTPicon, HomeIcon,ListUserIcon, LoginIcon } from "../../asset/icons";
+import { Link, NavLink } from "react-router-dom";
 
+import { useRef } from "react";
 
 const cx = classNames.bind(styles);
 function Navbar() {
 	const classes = cx("nav_item", cx("item"));
+	
+	
 
 	return (
 		<div className={cx("navbar")}>
 			<div className={classes}>
-				<Link to="/">
-					<HomeIcon/>
-				</Link>
+				<NavLink
+					to="/"
+					className={(nav) => cx("menu_item", { active: nav.isActive })}
+				
+				>
+					<HomeIcon />
+				</NavLink>
 			</div>
 			<div className={classes}>
-				<Link to="/otp">
+				<NavLink
+					to="/otp"
+					className={(nav) => cx("menu_item", { active: nav.isActive })}
+			
+				>
 					<OTPicon />
-				</Link>
+				</NavLink>
 			</div>
 			<div className={classes}>
-				<Link to="/list">ListUser</Link>
+				<NavLink to="/list"
+					className={(nav) => cx("menu_item", { active: nav.isActive })}
+				
+				>
+					<ListUserIcon />
+				</NavLink>
 			</div>
 			<div className={classes}>
-				<a href="/">Home</a>
+			<NavLink to="/login"
+					className={(nav) => cx("menu_item", { active: nav.isActive })}
+				
+				>
+					<LoginIcon />
+				</NavLink>
 			</div>
 		</div>
 	);

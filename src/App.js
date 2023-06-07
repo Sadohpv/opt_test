@@ -2,11 +2,11 @@ import Navbar from "./components/Navbar/Navbar";
 import { useEffect } from "react";
 import { publicRoutes } from "./routes";
 import "./App.css";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 function App() {
 	
 	return (
-		<BrowserRouter>
+		
 			<div className="App">
 				<Navbar />
 				
@@ -34,7 +34,7 @@ function App() {
 					})}
 				</Routes>
 			</div>
-		</BrowserRouter>
+		
 	);
 }
 

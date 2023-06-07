@@ -7,6 +7,7 @@ import config from '../config';
 import OTP from '../pages/OTP/OTP';
 import Home from '../pages/Home';
 import ListUser from '../pages/ListUser';
+import Login from '../pages/Login';
 
 //Public Route
 const publicRoutes = [
@@ -21,7 +22,12 @@ const publicRoutes = [
     {
         path: config.routes.list,
         component: ListUser,
+    },
+    {
+        path: config.routes.login,
+        component: Login,
     }
+
     
 ];
 

@@ -1,4 +1,4 @@
-import { useState} from "react";
+
 import { useEffect } from "react";
 import ModalCustom from "../../components/Modal";
 import { putEditUser } from "../../services/UserService";
@@ -7,12 +7,10 @@ function EditUser({ modalShowEdit, setModalShowEdit, name, setName, job, setJob,
     
 }) {
 
-    const [nameEdit, setNameEdit] = useState('');
-    const [jobEdit, setJobEdit] = useState('');
 
 	const handleSaveEdit = async () => {
 
-       let res = await putEditUser(nameEdit,jobEdit,dataUserEdit.id);
+       let res = await putEditUser(name,job,dataUserEdit.id);
 
        if(res && res.updatedAt){
             handlePutData({
@@ -29,9 +27,7 @@ function EditUser({ modalShowEdit, setModalShowEdit, name, setName, job, setJob,
     useEffect(()=>{
         if(modalShowEdit){
             setName(dataUserEdit.first_name);
-         
         }
-
     },[dataUserEdit])
 
 	return (

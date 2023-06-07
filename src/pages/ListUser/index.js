@@ -9,12 +9,14 @@ import { toast } from "react-toastify";
 import EditUser from "./editUser";
 import _ from "lodash";
 import DeleteUser from "./deleteUser";
-
+import { debounce } from "lodash";
+import { CSVLink } from "react-csv";
+import Papa from "papaparse";
 const cx = classNames.bind(styles);
 
 function ListUser() {
 	const [listUser, setListUser] = useState([]);
-	const [totalUsers, setTotalUsers] = useState(0);
+	//const [totalUsers, setTotalUsers] = useState(0);
 	const [totalPages, setTotalPages] = useState(0);
 
 	const [modalShow, setModalShow] = useState(false);
@@ -26,6 +28,12 @@ function ListUser() {
 	const [dataUserEdit, setDataUserEdit] = useState([]);
 	const [dataUserDelete, setDataUserDelete] = useState([]);
 
+	const [dataExport, setDataExport] = useState([]);
+
+	const [sortBy, setSortBy] = useState("asc");
+	const [sortField, setSortField] = useState("id");
+
+	const [keywords, setKeywords] = useState("");
 
 	const handleSave = async () => {
 		let res = await postCreateUser(name, job);
@@ -53,7 +61,7 @@ function ListUser() {
 	const getUsers = async (page) => {
 		let res = await fetchAllUser(page);
 		if (res && res.data) {
-			setTotalUsers(res.total);
+			//setTotalUsers(res.total);
 			setListUser(res.data);
 			setTotalPages(res.total_pages);
 		}
@@ -75,7 +83,6 @@ function ListUser() {
 	const handleDeleteShow = (item) => {
 		setDataUserDelete(item);
 		setModalShowDelete(true);
-
 	};
 	const handlePutData = (userEdit) => {
 		let cloneListUser = _.cloneDeep(listUser);
@@ -85,32 +92,168 @@ function ListUser() {
 		toast.success("Updated Success");
 	};
 
-	const handleDeleteData = (userDelete)=>{
+	const handleDeleteData = (userDelete) => {
 		let cloneListUser = _.cloneDeep(listUser);
 		//console.log(cloneListUser)
-		cloneListUser = cloneListUser.filter(item => item.id !== userDelete.id );
+		cloneListUser = cloneListUser.filter((item) => item.id !== userDelete.id);
 		//console.log(userDelete)
 		setListUser(cloneListUser);
-	
+	};
+
+	const handleSort = (sortBy, sortField) => {
+		setSortBy(sortBy);
+		setSortField(sortField);
+		let cloneListUser = _.cloneDeep(listUser);
+		cloneListUser = _.orderBy(cloneListUser, [sortField], [sortBy]);
+		setListUser(cloneListUser);
+	};
+
+	const handleSearch = debounce((event) => {
+		let key = event.target.value;
+		console.log(key);
+		if (key) {
+			let cloneListUser = _.cloneDeep(listUser);
+			cloneListUser = cloneListUser.filter((item) => item.email.includes(key));
+			setListUser(cloneListUser);
+		} else {
+			getUsers(1);
+		}
+	}, 0);
+
+	const handleImport = (event)=>{
+
+		if(event.target && event.target.files && event.target.files[0]){
+
+			let file = event.target.files[0];
+			if(file.type !== "text/csv"){
+				toast.error("Not file CSV");
+				return ;
+			}
+			Papa.parse(file,{
+				 //header : true, //header:true to set first row is header, key of data
+				complete: function(result){
+					let rawCSV = result.data;
+					if(rawCSV.length>0){
+						if(rawCSV[0] && rawCSV[0].length === 3){
+							if(rawCSV[0][0] !== "Email" 
+							|| rawCSV[0][1] !== "First Name"
+							|| rawCSV[0][2] !== "Last Name" ){
+								toast.error("Wrong format header CSV");
+							}else{
+								let result = [];
+								rawCSV.map((item,index)=>{
+									if(index>0 && item.length === 3){
+										let obj = {};
+										obj.email = item[0]
+										obj.first_name = item[1]
+										obj.last_name = item[2]
+										result.push(obj);
+									}
+								})
+								console.log(result);
+								setListUser(result);
+							}
+						}else{
+							toast.error("Wrong format CSV file");
+						}
+					}else {
+						toast.error("Have no data on CSV file");
+					}
+				}
+			})
+		}
+
+
+
+		
 	}
 
+	const handleExport = (event, done) => {
+		let result = [];
+		if (listUser && listUser.length > 0) {
+			result.push(["ID","Email","First Name","Last Name"])
+			listUser.map((item,index)=>{
+				let arr =[];
+				arr[0] = item.id;
+				arr[1] = item.email;
+				arr[2] = item.first_name;
+				arr[3] = item.last_name;
+				result.push(arr);
+			})
+			setDataExport(result);
+			done();
+		}
+	};
 	return (
 		<>
 			<div className={cx("button")}>
-				<button type="button" className="btn btn-dark" onClick={() => setModalShow(true)}>
-					+ Add New User
-				</button>
+				<div>
+					<button type="button" className="btn btn-success" onClick={() => setModalShow(true)}>
+						<i className="fa-solid fa-circle-plus"></i> Add New User
+					</button>
+
+					<div>
+						<CSVLink
+							data={dataExport}
+							className="btn btn-outline-info fw-bold"
+							filename={"hello.csv"}
+							asyncOnClick={true}
+							onClick={(event, done) => handleExport(event, done)}
+							target="_blank"
+						>
+							<i className="fa-solid fa-download"></i> Export file CSV
+						</CSVLink>
+					</div>
+					<label htmlFor="import" className="btn btn-outline-success">
+						<i className="fa-solid fa-file-import me-3"></i>Import
+					</label>
+					<input id="import" type="file" hidden
+					onChange={(event) => handleImport(event)}
+					/>
+				</div>
+				<div>
+					<input
+						className="form-control"
+						placeholder="Seach user by email..."
+						// value={keywords}
+						onChange={(event) => handleSearch(event)}
+					/>
+				</div>
 			</div>
 			<div className={cx("div_container")}>
 				<table id={cx("table")}>
 					<thead>
 						<tr>
-							<th>ID</th>
+							<th className={cx("sort_container")}>
+								<span>ID</span>
+								<span>
+									<i
+										className="fa-solid fa-arrow-down"
+										onClick={() => handleSort("desc", "id")}
+									></i>
+									<i
+										className="fa-solid fa-arrow-up"
+										onClick={() => handleSort("asc", "id")}
+									></i>
+								</span>
+							</th>
 							<th className={cx("image_div")} alt="image">
 								Image
 							</th>
 							<th>Email</th>
-							<th>First Name</th>
+							<th className={cx("sort_container")}>
+								<span>First Name</span>
+								<span>
+									<i
+										className="fa-solid fa-arrow-down"
+										onClick={() => handleSort("desc", "first_name")}
+									></i>
+									<i
+										className="fa-solid fa-arrow-up"
+										onClick={() => handleSort("asc", "first_name")}
+									></i>
+								</span>
+							</th>
 							<th>Last Name</th>
 							<th>Actions</th>
 						</tr>
@@ -144,10 +287,12 @@ function ListUser() {
 											>
 												Edit
 											</button>
-											<button className="btn btn-danger"
-											onClick={() => handleDeleteShow(item)}
-											
-											>Delete</button>
+											<button
+												className="btn btn-danger"
+												onClick={() => handleDeleteShow(item)}
+											>
+												Delete
+											</button>
 										</td>
 									</tr>
 								);
@@ -221,9 +366,8 @@ function ListUser() {
 				job={job}
 				setJob={setJob}
 				dataUserDelete={dataUserDelete}
-				setDataUserDelete = {setDataUserDelete}
+				setDataUserDelete={setDataUserDelete}
 				handleDeleteData={handleDeleteData}
-			
 			/>
 
 			<ToastifyUser />
