@@ -15,10 +15,7 @@ const publicRoutes = [
         path: config.routes.home,
         component: Home,
     },
-    {
-        path: config.routes.otp,
-        component: OTP,
-    },
+   
     {
         path: config.routes.list,
         component: ListUser,
@@ -34,7 +31,10 @@ const publicRoutes = [
 
 // Private Route
 const privateRoutes = [
-
+    {
+        path: config.routes.otp,
+        component: OTP,
+    },
 ];
 
 export {publicRoutes, privateRoutes}

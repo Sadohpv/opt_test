@@ -89,7 +89,9 @@
     background-color: #fe2c55;
     color: rgb(255, 255, 255) !important;
 }
-
+.goback{
+	cursor: pointer;
+}
 
 @keyframes spin {
 	0% { transform: rotate(0deg); }
