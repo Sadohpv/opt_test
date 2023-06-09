@@ -6,24 +6,28 @@ import ToastifyUser from "../ListUser/toastUser";
 import { useNavigate } from "react-router-dom";
 import { useContext, useState, useEffect } from "react";
 import { UserContext } from "../../useContextLearn/useContextCustom";
-
+import { handleLoginRedux } from "../../redux/actions/userAction";
+import { useDispatch, useSelector } from "react-redux";
 const cx = classNames.bind(styles);
 
 function Login() {
 	const navigate = useNavigate();
+
+	const dispatch = useDispatch();
+
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
-	const [loadings, setLoadings] = useState(false);
-
-	const { login } = useContext(UserContext);
+	const isLoading = useSelector(state => state.user.isLoading)
+	const data_init = useSelector(state => state.user.data_init)
+	
 
 	const handleInputEmail = (event) => {
 		setEmail(event.target.value);
-		console.log(event.target.value);
+	
 	};
 	const handleInputPassword = (event) => {
 		setPassword(event.target.value);
-		console.log(event.target.value);
+	
 	};
 
 	const handleLogin = async () => {
@@ -31,38 +35,23 @@ function Login() {
 			toast.error("Required email and password");
 			return;
 		}
-		setLoadings(true);
-		let res = await loginApi(email.trim(), password);
+		
+		dispatch(handleLoginRedux(email,password));
 
-		if (res && res.token) {
-			login(email, res.token);
-			toast.error("Login successful");
-			navigate("/");
-		} else {
-			if (res && res.status === 400) {
-				toast.error(res.data.error);
-			}
-		}
-		setLoadings(false);
 	};
 	const goBack = () => {
 		navigate("/");
 	};
 	const handleEnter = (event) => {
-        if(event && event.key === "Enter") {
-            handleLogin();
-        }
-        ;
-    };
-	useEffect(() => {
-		let token = localStorage.getItem("token");
-		let email = localStorage.getItem("email");
-		if (token) {
-			login(email, token);
+		if (event && event.key === "Enter") {
+			handleLogin();
+		}
+	};
+	useEffect(()=>{
+		if(data_init && data_init.auth === true){
 			navigate("/");
 		}
-	}, []);
-
+	},[data_init])
 	return (
 		<>
 			<div className={cx("container")}>
@@ -86,8 +75,7 @@ function Login() {
 						value={password}
 						onChange={(event) => handleInputPassword(event)}
 						onKeyDown={(event) => handleEnter(event)}
-					
-                    />
+					/>
 				</div>
 				<div className={cx("footer")}>
 					<span>Forgot password?</span>
@@ -96,7 +84,7 @@ function Login() {
 						disabled={email && password ? false : true}
 						onClick={() => handleLogin()}
 					>
-						{loadings && <i className={cx("fas fa-circle-notch fa-spin")}></i>}
+						{isLoading && <i className={cx("fas fa-circle-notch fa-spin")}></i>}
 						&nbsp;Login
 					</button>
 					<div className={cx("goback")} onClick={goBack}>

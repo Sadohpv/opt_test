@@ -7,9 +7,9 @@ import { useSelector } from "react-redux";
 
 function App() {
 
-	const dataUserRedux = useSelector(state => state.user.data);
+	const dataUserRedux = useSelector(state => state.user.data_init);
 
-	console.log(dataUserRedux);
+	
 
 	return (
 		<div className="App">

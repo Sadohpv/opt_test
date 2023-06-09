@@ -7,27 +7,31 @@ import { UserContext } from "../../useContextLearn/useContextCustom";
 import { toast } from "react-toastify";
 import ToastifyUser from "../../pages/ListUser/toastUser";
 import TippyCustom from "../Tippy";
-
+import { useDispatch, useSelector } from "react-redux";
+import { handleLogoutRedux,handleLoginRedux,handleRefresh } from "../../redux/actions/userAction";
 const cx = classNames.bind(styles);
 function Navbar() {
 	const classes = cx("nav_item", cx("item"));
 
-	const { logout, user, login } = useContext(UserContext);
+	const user = useSelector((state) => state.user.data_init);
+	const dispatch = useDispatch();
 	const navigate = useNavigate();
+
 	const handleLogout = () => {
+		dispatch(handleLogoutRedux());
 		toast.success("Logout Success");
-		logout();
 		navigate("/");
 	};
+	
 	useEffect(() => {
-		let token = localStorage.getItem("token");
-		let email = localStorage.getItem("email");
-		if (token) {
-			login(email, token);
-			navigate("/");
-		}
-	}, []);
+		dispatch(handleRefresh());
+	},[]);
 
+	// useEffect(() => {
+	// 	if(user && user.auth === false && window.location.pathname !=='/login'){
+
+	// 	}
+	// },[user]);
 	return (
 		<div className={cx("navbar")}>
 			<TippyCustom content="Home">
@@ -52,7 +56,7 @@ function Navbar() {
 				</div>
 			</TippyCustom>
 
-			{user && user.auth === false ? (
+			{user && user.auth === null ? (
 				<TippyCustom content="Login">
 					<div className={classes}>
 						<NavLink
