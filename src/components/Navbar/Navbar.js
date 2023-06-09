@@ -6,6 +6,7 @@ import { useContext, useEffect } from "react";
 import { UserContext } from "../../useContextLearn/useContextCustom";
 import { toast } from "react-toastify";
 import ToastifyUser from "../../pages/ListUser/toastUser";
+import TippyCustom from "../Tippy";
 
 const cx = classNames.bind(styles);
 function Navbar() {
@@ -29,34 +30,46 @@ function Navbar() {
 
 	return (
 		<div className={cx("navbar")}>
-			<div className={classes}>
-				<NavLink to="/" className={(nav) => cx("menu_item", { active: nav.isActive })}>
-					<HomeIcon />
-				</NavLink>
-			</div>
-			<div className={classes}>
-				<NavLink to="/otp" className={(nav) => cx("menu_item", { active: nav.isActive })}>
-					<OTPicon />
-				</NavLink>
-			</div>
-			<div className={classes}>
-				<NavLink to="/list" className={(nav) => cx("menu_item", { active: nav.isActive })}>
-					<ListUserIcon />
-				</NavLink>
-			</div>
-
-			{user && user.auth === false ? (
+			<TippyCustom content="Home">
 				<div className={classes}>
-					<NavLink to="/login" className={(nav) => cx("menu_item", { active: nav.isActive })}>
-						<LoginIcon />
+					<NavLink to="/" className={(nav) => cx("menu_item", { active: nav.isActive })}>
+						<HomeIcon />
 					</NavLink>
 				</div>
-			):(
-				<div className={classes} onClick={handleLogout}>
-					<LogoutIcon />
+			</TippyCustom>
+			<TippyCustom content="OTP">
+				<div className={classes}>
+					<NavLink to="/otp" className={(nav) => cx("menu_item", { active: nav.isActive })}>
+						<OTPicon />
+					</NavLink>
 				</div>
-			)
-		}
+			</TippyCustom>
+			<TippyCustom content="List User">
+				<div className={classes}>
+					<NavLink to="/list" className={(nav) => cx("menu_item", { active: nav.isActive })}>
+						<ListUserIcon />
+					</NavLink>
+				</div>
+			</TippyCustom>
+
+			{user && user.auth === false ? (
+				<TippyCustom content="Login">
+					<div className={classes}>
+						<NavLink
+							to="/login"
+							className={(nav) => cx("menu_item", { active: nav.isActive })}
+						>
+							<LoginIcon />
+						</NavLink>
+					</div>
+				</TippyCustom>
+			) : (
+				<TippyCustom content="Logout">
+					<div className={classes} onClick={handleLogout}>
+						<LogoutIcon />
+					</div>
+				</TippyCustom>
+			)}
 
 			<ToastifyUser />
 		</div>

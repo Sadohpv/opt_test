@@ -54,17 +54,77 @@
 	div {
 		display: flex;
 		flex-direction: row-reverse;
-
-		min-width: 300px;
-    justify-content: space-around;
+		padding: 0 20px;
+    	justify-content: space-around;
 	}
 }
 
 .sort_container {
 	display: flex;
+	width: 100%;
 	justify-content: space-between;
 	i {
 		cursor: pointer;
 		padding: 0 2px;
+	}
+}
+.col_4{
+	display: flex;
+	justify-content: space-around;
+}
+
+// Reponsive 
+
+@media (min-width: 900px) and (max-width: 1160px) {
+	
+}
+@media (min-width: 740px) and (max-width: 900px) {
+	.button{
+		
+		div{
+			padding: 0 10px;
+		}
+	}
+	
+
+}
+@media (max-width: 740px) {
+	.button{
+		button{
+			span{
+				display: none;
+			}
+		}
+		label{
+			span{
+				display: none;
+			}
+		}
+	}
+	.export{
+		span{
+			display: none;
+		}
+	}
+	
+}
+@media (min-width: 550px)and (max-width: 740px){
+
+	.col_1{
+		display: none;
+	}
+	.col_2{
+		display: none;
+	}
+}
+@media (max-width: 550px){
+	.col_1{
+		display: none;
+	}
+	.col_2{
+		display: none;
+	}
+	.col_3{
+		display: none;
 	}
 }

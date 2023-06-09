@@ -67,8 +67,8 @@ function Login() {
 			<div className={cx('header')}>
                 <span className={cx('text')}>Log in</span>
                 <div className={cx('header_label')}>
-                <span>Email or Username (eve.holt@reqres.in)</span>
-                <span>Log in with phone</span>
+                <span>Email (eve.holt@reqres.in)</span>
+                <span>Pass (anything)</span>
 
                 </div>
             </div>
@@ -96,7 +96,7 @@ function Login() {
                 
                 </button>
                 <div className={cx('goback')} onClick={goBack}>
-                <i class="fa-solid fa-chevron-left"></i> Go Back
+                <i className="fa-solid fa-chevron-left"></i> Go Back
                 </div>
             </div>
 		</div>

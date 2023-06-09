@@ -29,3 +29,10 @@
     display: flex;
     justify-content: center;
  }
+
+ @media (max-width: 440px) {
+	.button_otp{
+        width: 60%;
+    }
+}
+

@@ -120,66 +120,62 @@ function ListUser() {
 		}
 	}, 0);
 
-	const handleImport = (event)=>{
-
-		if(event.target && event.target.files && event.target.files[0]){
-
+	const handleImport = (event) => {
+		if (event.target && event.target.files && event.target.files[0]) {
 			let file = event.target.files[0];
-			if(file.type !== "text/csv"){
+			if (file.type !== "text/csv") {
 				toast.error("Not file CSV");
-				return ;
+				return;
 			}
-			Papa.parse(file,{
-				 //header : true, //header:true to set first row is header, key of data
-				complete: function(result){
+			Papa.parse(file, {
+				//header : true, //header:true to set first row is header, key of data
+				complete: function (result) {
 					let rawCSV = result.data;
-					if(rawCSV.length>0){
-						if(rawCSV[0] && rawCSV[0].length === 3){
-							if(rawCSV[0][0] !== "Email" 
-							|| rawCSV[0][1] !== "First Name"
-							|| rawCSV[0][2] !== "Last Name" ){
+					if (rawCSV.length > 0) {
+						if (rawCSV[0] && rawCSV[0].length === 3) {
+							if (
+								rawCSV[0][0] !== "Email" ||
+								rawCSV[0][1] !== "First Name" ||
+								rawCSV[0][2] !== "Last Name"
+							) {
 								toast.error("Wrong format header CSV");
-							}else{
+							} else {
 								let result = [];
-								rawCSV.map((item,index)=>{
-									if(index>0 && item.length === 3){
+								rawCSV.map((item, index) => {
+									if (index > 0 && item.length === 3) {
 										let obj = {};
-										obj.email = item[0]
-										obj.first_name = item[1]
-										obj.last_name = item[2]
+										obj.email = item[0];
+										obj.first_name = item[1];
+										obj.last_name = item[2];
 										result.push(obj);
 									}
-								})
+								});
 								console.log(result);
 								setListUser(result);
 							}
-						}else{
+						} else {
 							toast.error("Wrong format CSV file");
 						}
-					}else {
+					} else {
 						toast.error("Have no data on CSV file");
 					}
-				}
-			})
+				},
+			});
 		}
-
-
-
-		
-	}
+	};
 
 	const handleExport = (event, done) => {
 		let result = [];
 		if (listUser && listUser.length > 0) {
-			result.push(["ID","Email","First Name","Last Name"])
-			listUser.map((item,index)=>{
-				let arr =[];
+			result.push(["ID", "Email", "First Name", "Last Name"]);
+			listUser.map((item, index) => {
+				let arr = [];
 				arr[0] = item.id;
 				arr[1] = item.email;
 				arr[2] = item.first_name;
 				arr[3] = item.last_name;
 				result.push(arr);
-			})
+			});
 			setDataExport(result);
 			done();
 		}
@@ -189,10 +185,11 @@ function ListUser() {
 			<div className={cx("button")}>
 				<div>
 					<button type="button" className="btn btn-success" onClick={() => setModalShow(true)}>
-						<i className="fa-solid fa-circle-plus"></i> Add New User
+						<i className="fa-solid fa-circle-plus"></i>
+						<span>Add New User</span>
 					</button>
 
-					<div>
+					<div className={cx("export")}>
 						<CSVLink
 							data={dataExport}
 							className="btn btn-outline-info fw-bold"
@@ -201,15 +198,15 @@ function ListUser() {
 							onClick={(event, done) => handleExport(event, done)}
 							target="_blank"
 						>
-							<i className="fa-solid fa-download"></i> Export file CSV
+							<i className="fa-solid fa-download"></i>
+							<span>Export file CSV</span>
 						</CSVLink>
 					</div>
 					<label htmlFor="import" className="btn btn-outline-success">
-						<i className="fa-solid fa-file-import me-3"></i>Import
+						<i className="fa-solid fa-file-import"></i>
+						<span>Import</span>
 					</label>
-					<input id="import" type="file" hidden
-					onChange={(event) => handleImport(event)}
-					/>
+					<input id="import" type="file" hidden onChange={(event) => handleImport(event)} />
 				</div>
 				<div>
 					<input
@@ -224,7 +221,7 @@ function ListUser() {
 				<table id={cx("table")}>
 					<thead>
 						<tr>
-							<th className={cx("sort_container")}>
+							<th className={cx("sort_container","col_1")}>
 								<span>ID</span>
 								<span>
 									<i
@@ -237,10 +234,10 @@ function ListUser() {
 									></i>
 								</span>
 							</th>
-							<th className={cx("image_div")} alt="image">
+							<th className={cx("image_div","col_2")} alt="image">
 								Image
-							</th>
-							<th>Email</th>
+							</th >
+							<th className={cx("col_3")}>Email</th>
 							<th className={cx("sort_container")}>
 								<span>First Name</span>
 								<span>
@@ -264,8 +261,8 @@ function ListUser() {
 							listUser.map((item, index) => {
 								return (
 									<tr key={`user-${index}`}>
-										<td align="center">{item.id}</td>
-										<td>
+										<td align="center" className={cx("col_1")}>{item.id}</td>
+										<td className={cx("col_2")}>
 											<div>
 												<img
 													className={cx("image")}
@@ -277,12 +274,12 @@ function ListUser() {
 												/>
 											</div>
 										</td>
-										<td>{item.email}</td>
+										<td className={cx("col_3")}>{item.email}</td>
 										<td>{item.first_name}</td>
 										<td>{item.last_name}</td>
-										<td>
+										<td className={cx("col_4")}>
 											<button
-												className="btn btn-warning mx-3"
+												className="btn btn-warning"
 												onClick={() => handleEditShow(item)}
 											>
 												Edit

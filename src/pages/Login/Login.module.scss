@@ -11,7 +11,7 @@
 	border-radius: 8px;
 	box-shadow: 0 0px 10px #b0b0b0;
 	font-family: "Proxima Nova", sans-serif;
-	font-size: 20px;
+	font-size: 18px;
 }
 .header {
 	width: 100%;
@@ -28,7 +28,7 @@
 		align-items: center;
 		justify-content: space-between;
 		font-weight: 400;
-		font-size: 20px;
+		font-size: 18px;
 	}
 	.text {
 		font-size: 36px;
@@ -97,3 +97,30 @@
 	0% { transform: rotate(0deg); }
 	100% { transform: rotate(360deg); }
   }
+
+// Reponsive 
+
+@media (min-width: 900px) and (max-width: 1160px) {
+	
+}
+@media (min-width: 740px) and (max-width: 900px) {
+	
+}
+@media (max-width: 740px) {
+	// .container{
+		
+	// width: 100vw;
+	// padding: 10px;
+
+	// }
+	
+}
+@media (max-width: 600px) {
+	.container{
+		
+	width: 100vw;
+	padding: 10px;
+
+	}
+	
+}
