@@ -1,9 +1,9 @@
 import Navbar from "./components/Navbar/Navbar";
-import { useEffect } from "react";
 import { privateRoutes, publicRoutes } from "./routes";
 import "./App.css";
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import PrivateRoute from "./routes/privateRoute";
+import NotFound from "./pages/NotFound";
 function App() {
 	return (
 		<div className="App">
@@ -36,6 +36,7 @@ function App() {
 						/>
 					);
 				})}
+				<Route path="/*" element={<Navigate to="/404" replace />} />
 			</Routes>
 		</div>
 	);

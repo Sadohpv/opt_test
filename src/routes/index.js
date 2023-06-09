@@ -8,6 +8,7 @@ import OTP from '../pages/OTP/OTP';
 import Home from '../pages/Home';
 import ListUser from '../pages/ListUser';
 import Login from '../pages/Login';
+import NotFound from '../pages/NotFound';
 
 //Public Route
 const publicRoutes = [
@@ -23,6 +24,10 @@ const publicRoutes = [
     {
         path: config.routes.login,
         component: Login,
+    },
+    {
+        path: config.routes.notFound,
+        component: NotFound
     }
 
     

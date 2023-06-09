@@ -15,7 +15,7 @@ function Home() {
 	return (
 		<div>
 			
-		
+			Home
 			<ToastifyUser/>
 		</div>
 	);
