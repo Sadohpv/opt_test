@@ -6,17 +6,20 @@ import reportWebVitals from "./reportWebVitals";
 import "react-toastify/dist/ReactToastify.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import { BrowserRouter } from "react-router-dom";
-import { Provider } from "./useContextLearn/useContextCustom";
-
+import { Provider as ProviderUser } from "./useContextLearn/useContextCustom";
+import store from "./redux/store";
+import { Provider } from "react-redux";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-	<React.StrictMode>
-		<Provider>
-			<BrowserRouter>
-				<App />
-			</BrowserRouter>
-		</Provider>
-	</React.StrictMode>
+	<Provider store={store}>
+		<React.StrictMode>
+			<ProviderUser>
+				<BrowserRouter>
+					<App />
+				</BrowserRouter>
+			</ProviderUser>
+		</React.StrictMode>
+	</Provider>
 );
 
 // If you want to start measuring performance in your app, pass a function

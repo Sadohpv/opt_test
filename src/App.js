@@ -3,8 +3,14 @@ import { privateRoutes, publicRoutes } from "./routes";
 import "./App.css";
 import { Navigate, Route, Routes } from "react-router-dom";
 import PrivateRoute from "./routes/privateRoute";
-import NotFound from "./pages/NotFound";
+import { useSelector } from "react-redux";
+
 function App() {
+
+	const dataUserRedux = useSelector(state => state.user.data);
+
+	console.log(dataUserRedux);
+
 	return (
 		<div className="App">
 			<Navbar />
