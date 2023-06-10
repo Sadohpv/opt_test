@@ -9,7 +9,7 @@ import ErrorBoundary from "./components/errorBoundary/errorBoundary";
 function App() {
 	const dataUserRedux = useSelector((state) => state.user.data_init);
 
-	console.log(dataUserRedux);
+
 
 	return (
 		<div className="App">

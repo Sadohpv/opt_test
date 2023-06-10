@@ -10,7 +10,7 @@ function PrivateRoute({ children }) {
 			{user && user.auth ? (
 				children
 			) : (
-				<Alert varian="danger" className="w-75 mt-3 mx-auto">
+				<Alert variant="warning" className="w-75 mt-3 mx-auto">
 					<Alert.Heading>Oh snap! You got an Error!</Alert.Heading>
 					<p>You have no permission to access this route! Please LOGIN first</p>
 				</Alert>

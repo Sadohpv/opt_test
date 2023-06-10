@@ -21,10 +21,10 @@ function Navbar() {
 		toast.success("Logout Success");
 		navigate("/");
 	};
-	
+
 	useEffect(() => {
 		dispatch(handleRefresh());
-	},[]);
+	}, []);
 
 	// useEffect(() => {
 	// 	if(user && user.auth === false && window.location.pathname !=='/login'){
@@ -32,49 +32,54 @@ function Navbar() {
 	// 	}
 	// },[user]);
 	return (
-		<div className={cx("navbar")}>
-			<TippyCustom content="Home">
-				<div className={classes}>
-					<NavLink to="/" className={(nav) => cx("menu_item", { active: nav.isActive })}>
-						<HomeIcon />
-					</NavLink>
-				</div>
-			</TippyCustom>
-			<TippyCustom content="OTP">
-				<div className={classes}>
-					<NavLink to="/otp" className={(nav) => cx("menu_item", { active: nav.isActive })}>
-						<OTPicon />
-					</NavLink>
-				</div>
-			</TippyCustom>
-			<TippyCustom content="List User">
-				<div className={classes}>
-					<NavLink to="/list" className={(nav) => cx("menu_item", { active: nav.isActive })}>
-						<ListUserIcon />
-					</NavLink>
-				</div>
-			</TippyCustom>
-
-			{user && user.auth === null ? (
-				<TippyCustom content="Login">
+		<div className={cx("container_block")}>
+			<div className={cx("navbar")}>
+				<TippyCustom content="Home">
 					<div className={classes}>
-						<NavLink
-							to="/login"
-							className={(nav) => cx("menu_item", { active: nav.isActive })}
-						>
-							<LoginIcon />
+						<NavLink to="/" className={(nav) => cx("menu_item", { active: nav.isActive })}>
+							<HomeIcon />
 						</NavLink>
 					</div>
 				</TippyCustom>
-			) : (
-				<TippyCustom content="Logout">
-					<div className={classes} onClick={handleLogout}>
-						<LogoutIcon />
+				<TippyCustom content="OTP">
+					<div className={classes}>
+						<NavLink to="/otp" className={(nav) => cx("menu_item", { active: nav.isActive })}>
+							<OTPicon />
+						</NavLink>
 					</div>
 				</TippyCustom>
-			)}
+				<TippyCustom content="List User">
+					<div className={classes}>
+						<NavLink
+							to="/list"
+							className={(nav) => cx("menu_item", { active: nav.isActive })}
+						>
+							<ListUserIcon />
+						</NavLink>
+					</div>
+				</TippyCustom>
 
-			<ToastifyUser />
+				{user && user.auth === null ? (
+					<TippyCustom content="Login">
+						<div className={classes}>
+							<NavLink
+								to="/login"
+								className={(nav) => cx("menu_item", { active: nav.isActive })}
+							>
+								<LoginIcon />
+							</NavLink>
+						</div>
+					</TippyCustom>
+				) : (
+					<TippyCustom content="Logout">
+						<div className={classes} onClick={handleLogout}>
+							<LogoutIcon />
+						</div>
+					</TippyCustom>
+				)}
+
+				<ToastifyUser />
+			</div>
 		</div>
 	);
 }
