@@ -4,12 +4,12 @@ import "./App.css";
 import { Navigate, Route, Routes } from "react-router-dom";
 import PrivateRoute from "./routes/privateRoute";
 import { useSelector } from "react-redux";
+import ErrorBoundary from "./components/errorBoundary/errorBoundary";
 
 function App() {
+	const dataUserRedux = useSelector((state) => state.user.data_init);
 
-	const dataUserRedux = useSelector(state => state.user.data_init);
-
-	
+	console.log(dataUserRedux);
 
 	return (
 		<div className="App">
@@ -26,7 +26,17 @@ function App() {
 					// 	Layout = Fragment;
 					// }
 
-					return <Route key={index} path={route.path} element={<Page />} />;
+					return (
+						<Route
+							key={index}
+							path={route.path}
+							element={
+								<ErrorBoundary>
+									<Page />
+								</ErrorBoundary>
+							}
+						/>
+					);
 				})}
 				{privateRoutes.map((route, index) => {
 					const Page = route.component;

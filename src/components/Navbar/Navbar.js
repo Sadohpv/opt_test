@@ -2,13 +2,12 @@ import styles from "./Navbar.module.scss";
 import classNames from "classnames/bind";
 import { OTPicon, HomeIcon, ListUserIcon, LoginIcon, LogoutIcon } from "../../asset/icons";
 import { NavLink, useNavigate } from "react-router-dom";
-import { useContext, useEffect } from "react";
-import { UserContext } from "../../useContextLearn/useContextCustom";
+import { useEffect } from "react";
 import { toast } from "react-toastify";
 import ToastifyUser from "../../pages/ListUser/toastUser";
 import TippyCustom from "../Tippy";
 import { useDispatch, useSelector } from "react-redux";
-import { handleLogoutRedux,handleLoginRedux,handleRefresh } from "../../redux/actions/userAction";
+import { handleLogoutRedux, handleRefresh } from "../../redux/actions/userAction";
 const cx = classNames.bind(styles);
 function Navbar() {
 	const classes = cx("nav_item", cx("item"));

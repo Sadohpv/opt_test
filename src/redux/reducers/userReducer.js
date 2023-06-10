@@ -2,7 +2,6 @@ import {
 	FETCH_USER_ERROR,
 	FETCH_USER_LOGIN,
 	FETCH_USER_SUCCESS,
-	USER_LOGIN,
 	USER_LOGOUT,
 	USER_REFRESH,
 } from "../actions/userAction";
@@ -35,13 +34,12 @@ const userReducer = (state = INITIAL_STATE, action) => {
                 isError: true,
 			};
 		case FETCH_USER_SUCCESS:
-			console.log(action);
 			return {
 				...state,
 				data_init: {
 					email: action.data.email,
-					token: action.data.token,
 					auth: true,
+					token: action.data.token,
 				},
                 isLoading: false,
                 isError: false,
@@ -54,19 +52,22 @@ const userReducer = (state = INITIAL_STATE, action) => {
                 ...state,
                 data_init: {
 					email: '',
-					token: '',
 					auth: null,
+					token: '',
 				},
             }
 		case USER_REFRESH:
-			return {
-                ...state,
-                data_init: {
-					email:  localStorage.getItem('email'),
-					token: localStorage.getItem('token'),
-					auth: true,
-				},
-            }
+			if( localStorage.getItem('token')){
+				return {
+					...state,
+					data_init: {
+						email:  localStorage.getItem('email'),
+						auth: true,
+						token: localStorage.getItem('token'),
+					},
+				}
+			}
+			
 		default:
 			return state;
 	}

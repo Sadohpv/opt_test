@@ -1,11 +1,9 @@
 import styles from "./Login.module.scss";
 import classNames from "classnames/bind";
 import { toast } from "react-toastify";
-import { loginApi } from "../../services/UserService";
 import ToastifyUser from "../ListUser/toastUser";
 import { useNavigate } from "react-router-dom";
-import { useContext, useState, useEffect } from "react";
-import { UserContext } from "../../useContextLearn/useContextCustom";
+import { useState, useEffect } from "react";
 import { handleLoginRedux } from "../../redux/actions/userAction";
 import { useDispatch, useSelector } from "react-redux";
 const cx = classNames.bind(styles);
